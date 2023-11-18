@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   StatusCode.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maboulkh <maboulkh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: elasce <elasce@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 21:04:08 by maboulkh          #+#    #+#             */
-/*   Updated: 2023/11/17 21:05:27 by maboulkh         ###   ########.fr       */
+/*   Updated: 2023/11/18 18:40:33 by elasce           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ std::string StatusCode::statusLine(std::string& code)
     line += " " + code + " " + reasonPhrase[code];
     return (line);
 }
-
 
 StatusCode::~StatusCode()
 {

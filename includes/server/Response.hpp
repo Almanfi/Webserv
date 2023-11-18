@@ -3,27 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   Response.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maboulkh <maboulkh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: elasce <elasce@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 17:50:59 by maboulkh          #+#    #+#             */
-/*   Updated: 2023/11/17 22:16:25 by maboulkh         ###   ########.fr       */
+/*   Updated: 2023/11/18 21:46:19 by elasce           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <sys/types.h>
-#include <wait.h>
-#include <errno.h>
-#include <unistd.h>
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <stdexcept>
+#include "webserv.hpp"
+#include <ctime>
 #include <sstream>
-#include <cstdio>
-#include <map>
-#include <cstring>
 
 class Response
 {
@@ -31,23 +22,30 @@ private:
     std::map<std::string, std::string> ResponseHeader;
     std::string header;
     std::string body;
+    std::string fileName;
+    std::string code;
+
+    std::string findType(std::string& fileName);
+    std::string date();
+    std::string contentLength();
 public:
     Response(std::string& body);
     ~Response();
 
-    std::string findType(std::string& fileName);
 };
 
 Response::Response(std::string& body)
 {
     StatusCode a;
 
-    std::string StatusLine = a.statusLine();
+    fileName = "";
+    code = "200";
+    std::string StatusLine = a.statusLine(code);
     // "HTTP-Version Status-Code Reason-Phrase\r\n"; //server.httpVer() + " " + status + phrase(status) + "\r\n";
-    ResponseHeader["date"] = "webserv"; // sever.name();
-    ResponseHeader["content-type"] = ""; // content.findType();
-    ResponseHeader["content-length"] = ""; // content.lenth();
     ResponseHeader["Server"] = "webserv"; // sever.name();
+    ResponseHeader["date"] = date(); // date();
+    ResponseHeader["content-type"] = findType(fileName); // content.findType();
+    ResponseHeader["content-length"] = contentLength(); // content.lenth();
 
 /*
 HTTP/1.1 200 OK
@@ -65,8 +63,35 @@ set-cookie: parking_session=a1bce949-f6af-4226-92a1-d746484b8a79; expires=Fri, 1
 
 }
 
+std::string Response::contentLength() {
+    size_t size;
+    std::stringstream ss;
+    std::ifstream file(fileName.c_str());
+    if (!file.is_open())
+    {
+        // throw
+        return "";
+    }
+    
+    std::streampos start = file.tellg();
+    file.seekg(0, std::ios::end);
+    std::streampos end = file.tellg(); 
+    ss << (end - start);
+    return ((std::string) ss.str());
+}
+
+std::string Response::date() {
+    std::time_t   nowTime = std::time(NULL);
+    std::tm* gmTime = std::gmtime(&nowTime);
+
+    char    buffer[100];
+    std::strftime(buffer, sizeof(buffer), "%a, %d %b %Y %X GMT", gmTime);
+    return ((std::string) buffer);
+}
+
 std::string Response::findType(std::string& fileName) {
     std::map<std::string, std::string> type;
+    type["default"] = "application/octet-stream";
     type[".aac"] = "audio/aac";
     type[".abw"] = "application/x-abiword";
     type[".arc"] = "application/x-freearc";
@@ -143,14 +168,15 @@ std::string Response::findType(std::string& fileName) {
     type[".3gp"] = "video/3gpp;";
     type[".3g2"] = "video/3gpp2;";
     type[".7z"] = "application/x-7z-compressed";
-    size_t  i;
-
-    i = fileName.find_last_of('.');
-    std::map<std::string, std::string>::const_iterator res = type.find(std::string(fileName.c_str() + i));
+    
+    size_t i = fileName.find_last_of('.');
+    if (i == std::string::npos)
+        return (type["default"]);
+    std::map<std::string, std::string>::const_iterator res = type.find(fileName.substr(i));
     if (res != type.end())
         return (res->second);
     else
-        return ("application/octet-stream");
+        return (type["default"]);
 }
 
 
