@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cgi.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elasce <elasce@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maboulkh <maboulkh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 17:20:54 by maboulkh          #+#    #+#             */
-/*   Updated: 2023/11/16 01:55:49 by elasce           ###   ########.fr       */
+/*   Updated: 2023/11/20 04:57:23 by maboulkh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ CgiExceptions::CgiExceptions(const string addr, const string msg, const Cgi *del
     Cgi_msg = new string(msg);
     if (del)
         delete del;
+    (void) addr;// check
 }
 
 const char *CgiExceptions::what() const throw()
@@ -65,9 +66,14 @@ void Cgi::lunchScript(void) {
     // out->dup();
     in->write(body);
     in->rewind();
-    if (chdir(path.c_str()) != 0)
+    if (chdir(path.c_str()) != 0) {
         ;//throw
-    execve(scriptPath.c_str(), NULL, envp);
+    }
+    const char *args[3];
+    args[0] = "cgi_path"; // check
+    args[1] = scriptPath.c_str();
+    args[2] = NULL;
+    execve(args[0], (char * const *) args, envp);
 }
 
 void Cgi::makeEnv() { 

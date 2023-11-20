@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tempfile.cpp                                       :+:      :+:    :+:   */
+/*   TempFile.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elasce <elasce@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maboulkh <maboulkh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 00:45:15 by elasce            #+#    #+#             */
-/*   Updated: 2023/11/15 13:27:20 by elasce           ###   ########.fr       */
+/*   Updated: 2023/11/20 04:50:11 by maboulkh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ TempFile::TempFile(std::string& file, FILE* std) : fileName(file), std(std) {
     else if (std == stdout)
         fd = ::dup(1);
     fs = std::freopen(fileName.c_str(), "w+", std);
-    if (!fs)
+    if (!fs) {
         ;//throw
+    }
 }
 
 void TempFile::rewind() {
@@ -70,6 +71,7 @@ int TempFile::resetFd() {
     else if (std == stdout)
         ::dup2(fd, 1);
     fd = -1;
+    return (0); // check
 }
 
 int TempFile::write(std::string &str) {

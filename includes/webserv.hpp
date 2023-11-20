@@ -6,7 +6,7 @@
 /*   By: maboulkh <maboulkh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 19:03:03 by bamrouch          #+#    #+#             */
-/*   Updated: 2023/11/17 21:05:56 by maboulkh         ###   ########.fr       */
+/*   Updated: 2023/11/20 05:17:58 by maboulkh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,4 +18,4 @@
 #include "./helpers/StatusCode.hpp"
 #include "./server/server.hpp"
 #include "./server/cgi.hpp"
-
+#include "./server/Response.hpp"

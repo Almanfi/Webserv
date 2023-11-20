@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TempFile.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: elasce <elasce@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maboulkh <maboulkh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 00:46:06 by elasce            #+#    #+#             */
-/*   Updated: 2023/11/15 13:39:30 by elasce           ###   ########.fr       */
+/*   Updated: 2023/11/20 04:50:32 by maboulkh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 
 class TempFile {
     private:
-    int fd;
-    std::FILE* fs;
-    std::FILE* std;
     std::string fileName;
+    std::FILE* std;
+    std::FILE* fs;
+    int fd;
     
     public:
     TempFile(std::string& file, FILE* std);
